@@ -19,6 +19,7 @@ import {
   Image as ImageIcon,
   Eye,
 } from "lucide-react";
+import AdminDashboard from "./components/Admin/AdminDashboard";
 
 const LibraryWebsite = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -26,12 +27,26 @@ const LibraryWebsite = () => {
   const [scrollY, setScrollY] = useState(0);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAdminMode, setIsAdminMode] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Check if we're in admin mode
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('admin') === 'true') {
+      setIsAdminMode(true);
+    }
+  }, []);
+
+  // If in admin mode, show admin dashboard
+  if (isAdminMode) {
+    return <AdminDashboard />;
+  }
 
   const navItems = [
     { id: "beranda", label: "Beranda", icon: BookOpen },
