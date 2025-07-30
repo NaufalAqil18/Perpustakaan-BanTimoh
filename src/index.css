@@ -23,6 +23,15 @@
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
+  background: linear-gradient(135deg, #111827 0%, #1e293b 50%, #000000 100%);
+  min-height: 100vh;
+}
+
+body {
+  background: linear-gradient(135deg, #111827 0%, #1e293b 50%, #000000 100%);
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
 }
 
 /* Custom scrollbar */
