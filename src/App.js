@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import AdminPanel from "./components/AdminPanel";
 import useContentManager from "./hooks/useContentManager";
+import useGalleryManager from "./hooks/useGalleryManager";
 
 const LibraryWebsite = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -32,6 +33,7 @@ const LibraryWebsite = () => {
   const [isAdminMode, setIsAdminMode] = useState(false);
   const [showAdminPanel, setShowAdminPanel] = useState(false);
   const { content, saveContent } = useContentManager();
+  const { photos: galleryPhotos } = useGalleryManager();
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -503,63 +505,8 @@ const LibraryWebsite = () => {
 
           {/* Gallery Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-            {[
-              // TEMPLATE: Copy dan sesuaikan data foto Anda di sini
-              {
-                id: 1,
-                src: "/images/gallery/membacaNyaring.jpg", // Ganti dengan path foto Anda
-                alt: "Kegiatan Membaca Nyaring",
-                title: "Kegiatan Membaca Nyaring",
-                date: "10 Juli 2025",
-                category: "KKN Literasi",
-                description: "Kegiatan Membaca Nyaring di Gampong Ulee Kareung"
-              },
-              {
-                id: 2,
-                src: "/images/gallery/mengulasBuku.jpg", // Ganti dengan path foto Anda
-                alt: "Kegiatan Mengulas Buku",
-                title: "Kegiatan Mengulas Buku",
-                date: "11 Juli 2025",
-                category: "KKN Literasi",
-                description: "Kegiatan Mengulas Buku di Gampong Ulee Kareung"
-              },
-              {
-                id: 3,
-                src: "/images/gallery/menulisCerita.jpg", // Ganti dengan path foto Anda
-                alt: "Kegiatan Menulis Cerita",
-                title: "Kegiatan Menulis Cerita",
-                date: "12 Juli 2025",
-                category: "KKN Literasi",
-                description: "Kegiatan Menulis Cerita di Gampong Ulee Kareung"
-              },
-              {
-                id: 4,
-                src: "/images/gallery/proyekBerbasisBuku.jpg", // Ganti dengan path foto Anda
-                alt: "Kegiatan Proyek Berbasis Buku",
-                title: "Kegiatan Proyek Berbasis Buku",
-                date: "16 Juli 2025",
-                category: "KKN Literasi",
-                description: "Kegiatan Membuat Proyek Berbasis Buku di Gampong Ulee Kareung"
-              },
-              {
-                id: 5,
-                src: "/images/gallery/membacaBuku.jpg", // Ganti dengan path foto Anda
-                alt: "Kegiatan Membaca Buku",
-                title: "Kegiatan Membaca Buku",
-                date: "10 Juli 2025",
-                category: "Program Literasi",
-                description: "Kegiatan Membaca Buku di Gampong Ulee Kareung untuk meningkatkan literasi masyarakat"
-              },
-              {
-                id: 6,
-                src: "/images/gallery/les.jpg", // Ganti dengan path foto Anda
-                alt: "Kegiatan Les Literasi",
-                title: "Kegiatan Les KKN Literasi",
-                date: "12 Juli 2025",
-                category: "KKN Literasi",
-                description: "Kegiatan Les Literasi di Gampong Ulee Kareung"
-              }
-            ].map((photo) => (
+            {galleryPhotos.length > 0 ? (
+              galleryPhotos.map((photo) => (
                                               <div
                   key={photo.id}
                   className={`group relative bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl overflow-hidden border transition-all duration-300 transform hover:scale-105 hover:shadow-2xl cursor-pointer ${
@@ -572,68 +519,75 @@ const LibraryWebsite = () => {
                   onClick={() => openModal(photo)}
                 >
                   <div className="aspect-[4/3] relative overflow-hidden">
-                  <img
-                    src={photo.src}
-                    alt={photo.alt}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    onError={(e) => {
-                      e.target.style.display = 'none';
-                      e.target.nextSibling.style.display = 'flex';
-                    }}
-                  />
-                  {/* Fallback jika foto tidak ditemukan */}
-                  <div className="hidden w-full h-full bg-gradient-to-br from-blue-500/20 to-cyan-500/20 flex items-center justify-center">
-                    <div className="text-center">
-                      <ImageIcon className="h-12 w-12 text-blue-400 mx-auto mb-2" />
-                      <p className="text-blue-400 text-sm">Foto belum ditambahkan</p>
+                    <img
+                      src={photo.url}
+                      alt={photo.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.nextSibling.style.display = 'flex';
+                      }}
+                    />
+                    {/* Fallback jika foto tidak ditemukan */}
+                    <div className="hidden w-full h-full bg-gradient-to-br from-blue-500/20 to-cyan-500/20 flex items-center justify-center">
+                      <div className="text-center">
+                        <ImageIcon className="h-12 w-12 text-blue-400 mx-auto mb-2" />
+                        <p className="text-blue-400 text-sm">Foto belum ditambahkan</p>
+                      </div>
                     </div>
-                  </div>
-                  
-                  <div className={`absolute inset-0 transition-opacity duration-300 ${
-                    photo.category === "KKN Literasi" 
-                      ? "bg-gradient-to-t from-purple-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100" 
-                      : photo.category === "Program Literasi"
-                      ? "bg-gradient-to-t from-green-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100"
-                      : "bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100"
-                  }`} />
-                  
-                                     {/* Overlay Info */}
-                   <div className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                     <div className="space-y-2">
-                       <span className={`text-xs px-2 py-1 rounded-full ${
-                         photo.category === "KKN Literasi" 
-                           ? "bg-purple-500/80 text-white" 
-                           : photo.category === "Program Literasi"
-                           ? "bg-green-500/80 text-white"
-                           : "bg-blue-500/80 text-white"
-                       }`}>
-                         {photo.category}
-                       </span>
-                       <h3 className="text-sm font-semibold text-white truncate">
-                         {photo.title}
-                       </h3>
-                       <p className="text-xs text-gray-300 flex items-center space-x-1">
-                         <Calendar className="h-3 w-3" />
-                         <span>{photo.date}</span>
-                       </p>
-                     </div>
-                   </div>
-
-                  {/* View Button */}
-                  <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white text-sm transition-colors duration-200 ${
+                    
+                    <div className={`absolute inset-0 transition-opacity duration-300 ${
                       photo.category === "KKN Literasi" 
-                        ? "bg-purple-500/80 hover:bg-purple-500" 
+                        ? "bg-gradient-to-t from-purple-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100" 
                         : photo.category === "Program Literasi"
-                        ? "bg-green-500/80 hover:bg-green-500"
-                        : "bg-blue-500/80 hover:bg-blue-500"
-                    }`}>
-                      <Eye className="h-4 w-4" />
+                        ? "bg-gradient-to-t from-green-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100"
+                        : "bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100"
+                    }`} />
+                    
+                    {/* Overlay Info */}
+                    <div className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                      <div className="space-y-2">
+                        <span className={`text-xs px-2 py-1 rounded-full ${
+                          photo.category === "KKN Literasi" 
+                            ? "bg-purple-500/80 text-white" 
+                            : photo.category === "Program Literasi"
+                            ? "bg-green-500/80 text-white"
+                            : "bg-blue-500/80 text-white"
+                        }`}>
+                          {photo.category}
+                        </span>
+                        <h3 className="text-sm font-semibold text-white truncate">
+                          {photo.title}
+                        </h3>
+                        <p className="text-xs text-gray-300 flex items-center space-x-1">
+                          <Calendar className="h-3 w-3" />
+                          <span>{photo.date}</span>
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* View Button */}
+                    <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white text-sm transition-colors duration-200 ${
+                        photo.category === "KKN Literasi" 
+                          ? "bg-purple-500/80 hover:bg-purple-500" 
+                          : photo.category === "Program Literasi"
+                          ? "bg-green-500/80 hover:bg-green-500"
+                          : "bg-blue-500/80 hover:bg-blue-500"
+                      }`}>
+                        <Eye className="h-4 w-4" />
+                      </div>
                     </div>
                   </div>
                 </div>
+              ))
+            ) : (
+              <div className="col-span-full text-center py-12">
+                <ImageIcon className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-gray-300 mb-2">Belum Ada Foto</h3>
+                <p className="text-gray-500">Upload foto pertama melalui admin panel</p>
               </div>
-            ))}
+            )}
           </div>
 
 
@@ -682,15 +636,15 @@ const LibraryWebsite = () => {
                       </p>
                     </div>
                     
-                                         <span className={`text-xs px-3 py-1 rounded-full ${
-                       selectedPhoto.category === "KKN Literasi" 
-                         ? "bg-purple-500/20 text-purple-400" 
-                         : selectedPhoto.category === "Program Literasi"
-                         ? "bg-green-500/20 text-green-400"
-                         : "bg-blue-500/20 text-blue-400"
-                     }`}>
-                       {selectedPhoto.category}
-                     </span>
+                    <span className={`text-xs px-3 py-1 rounded-full ${
+                      selectedPhoto.category === "KKN Literasi" 
+                        ? "bg-purple-500/20 text-purple-400" 
+                        : selectedPhoto.category === "Program Literasi"
+                        ? "bg-green-500/20 text-green-400"
+                        : "bg-blue-500/20 text-blue-400"
+                    }`}>
+                      {selectedPhoto.category}
+                    </span>
                   </div>
                   
                   <p className="text-gray-300">

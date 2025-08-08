@@ -9,12 +9,15 @@ import {
   Camera,
   MapPin,
   Plus,
-  Trash2
+  Trash2,
+  Image as ImageIcon
 } from 'lucide-react';
+import GalleryManager from './GalleryManager';
 
 const AdminPanel = ({ isVisible, onClose, onSave }) => {
   const [activeTab, setActiveTab] = useState('hero');
   const [isEditing, setIsEditing] = useState(false);
+  const [showGalleryManager, setShowGalleryManager] = useState(false);
   const [formData, setFormData] = useState({
     hero: {
       title: 'Perpustakaan Ban Timoh',
@@ -246,7 +249,8 @@ const AdminPanel = ({ isVisible, onClose, onSave }) => {
   const tabs = [
     { id: 'hero', label: 'Hero Section', icon: BookOpen },
     { id: 'stats', label: 'Statistik', icon: Users },
-    { id: 'contact', label: 'Kontak', icon: MapPin }
+    { id: 'contact', label: 'Kontak', icon: MapPin },
+    { id: 'gallery', label: 'Galeri Foto', icon: ImageIcon }
   ];
 
   const renderTabContent = () => {
@@ -257,10 +261,31 @@ const AdminPanel = ({ isVisible, onClose, onSave }) => {
         return renderStatsSection();
       case 'contact':
         return renderContactSection();
+      case 'gallery':
+        return renderGallerySection();
       default:
         return renderHeroSection();
     }
   };
+
+  const renderGallerySection = () => (
+    <div className="space-y-6">
+      <div className="text-center">
+        <ImageIcon className="h-16 w-16 text-blue-400 mx-auto mb-4" />
+        <h3 className="text-xl font-semibold text-white mb-2">Kelola Galeri Foto</h3>
+        <p className="text-gray-400 mb-6">
+          Upload, edit, dan hapus foto kegiatan perpustakaan
+        </p>
+        <button
+          onClick={() => setShowGalleryManager(true)}
+          className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors flex items-center space-x-2 mx-auto"
+        >
+          <ImageIcon className="h-5 w-5" />
+          <span>Buka Gallery Manager</span>
+        </button>
+      </div>
+    </div>
+  );
 
   if (!isVisible) return null;
 
@@ -341,6 +366,12 @@ const AdminPanel = ({ isVisible, onClose, onSave }) => {
           </div>
         </div>
       </div>
+
+      {/* Gallery Manager Modal */}
+      <GalleryManager
+        isVisible={showGalleryManager}
+        onClose={() => setShowGalleryManager(false)}
+      />
     </div>
   );
 };
