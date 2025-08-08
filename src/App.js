@@ -18,8 +18,10 @@ import {
   Smartphone,
   Image as ImageIcon,
   Eye,
+  Settings,
 } from "lucide-react";
-import AdminDashboard from "./components/Admin/AdminDashboard";
+import AdminPanel from "./components/AdminPanel";
+import useContentManager from "./hooks/useContentManager";
 
 const LibraryWebsite = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -28,6 +30,8 @@ const LibraryWebsite = () => {
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAdminMode, setIsAdminMode] = useState(false);
+  const [showAdminPanel, setShowAdminPanel] = useState(false);
+  const { content, saveContent } = useContentManager();
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -42,11 +46,6 @@ const LibraryWebsite = () => {
       setIsAdminMode(true);
     }
   }, []);
-
-  // If in admin mode, show admin dashboard
-  if (isAdminMode) {
-    return <AdminDashboard />;
-  }
 
   const navItems = [
     { id: "beranda", label: "Beranda", icon: BookOpen },
@@ -72,6 +71,11 @@ const LibraryWebsite = () => {
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedPhoto(null);
+  };
+
+  const handleAdminSave = (newContent) => {
+    saveContent(newContent);
+    setShowAdminPanel(false);
   };
 
   const FloatingParticles = () => (
@@ -140,6 +144,17 @@ const LibraryWebsite = () => {
               ))}
             </div>
 
+            {/* Admin Button */}
+            {isAdminMode && (
+              <button
+                onClick={() => setShowAdminPanel(true)}
+                className="hidden lg:flex items-center space-x-2 px-4 py-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-medium transition-all duration-300 group"
+              >
+                <Settings className="h-4 w-4 group-hover:scale-110 transition-transform duration-300" />
+                <span>Admin</span>
+              </button>
+            )}
+
             {/* Mobile Menu Button */}
             <button
               className="lg:hidden p-3 rounded-xl hover:bg-white/10 transition-all duration-300 group"
@@ -205,24 +220,23 @@ const LibraryWebsite = () => {
             <BookOpen className="h-24 w-24 mx-auto text-blue-400 mb-4" />
           </div>
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 bg-clip-text text-transparent animate-pulse">
-            Perpustakaan Ban Timoh
+            {content.hero.title}
           </h1>
           <p className="text-lg sm:text-xl md:text-2xl text-gray-300 mb-8 leading-relaxed px-4">
-            Jendela pengetahuan yang menghubungkan masa lalu, masa kini, dan
-            masa depan melalui teknologi modern dan koleksi yang kaya.
+            {content.hero.subtitle}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center px-4">
             <button
               onClick={() => scrollToSection("opac")}
               className="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full text-white font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-2xl text-sm sm:text-base"
             >
-              Jelajahi Katalog
+              {content.hero.button1Text}
             </button>
             <button
               onClick={() => scrollToSection("ar")}
               className="px-6 sm:px-8 py-3 sm:py-4 bg-transparent border-2 border-blue-400 rounded-full text-blue-400 font-semibold hover:bg-blue-400 hover:text-white transition-all duration-300 transform hover:scale-105 text-sm sm:text-base"
             >
-              Coba AR Experience
+              {content.hero.button2Text}
             </button>
           </div>
         </div>
@@ -249,32 +263,23 @@ const LibraryWebsite = () => {
 
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-            <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 p-8 rounded-2xl border border-blue-400/20 hover:border-blue-400/50 transition-all duration-300 transform hover:scale-105 group">
-              <div className="flex items-center justify-between mb-4">
-                <Users className="h-12 w-12 text-blue-400 group-hover:scale-110 transition-transform duration-300" />
-                <div className="text-3xl font-bold text-blue-400">25</div>
-              </div>
-              <h4 className="text-lg font-semibold mb-2 text-white">Anggota Aktif</h4>
-              <p className="text-gray-400 text-sm">Komunitas pembaca yang berkembang</p>
-            </div>
-
-            <div className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 p-8 rounded-2xl border border-purple-400/20 hover:border-purple-400/50 transition-all duration-300 transform hover:scale-105 group">
-              <div className="flex items-center justify-between mb-4">
-                <BookOpen className="h-12 w-12 text-purple-400 group-hover:scale-110 transition-transform duration-300" />
-                <div className="text-3xl font-bold text-purple-400">1000+</div>
-              </div>
-              <h4 className="text-lg font-semibold mb-2 text-white">Koleksi Buku</h4>
-              <p className="text-gray-400 text-sm">Dari berbagai genre dan kategori</p>
-            </div>
-
-            <div className="bg-gradient-to-br from-green-500/10 to-blue-500/10 p-8 rounded-2xl border border-green-400/20 hover:border-green-400/50 transition-all duration-300 transform hover:scale-105 group">
-              <div className="flex items-center justify-between mb-4">
-                <Globe className="h-12 w-12 text-green-400 group-hover:scale-110 transition-transform duration-300" />
-                <div className="text-3xl font-bold text-green-400">2</div>
-              </div>
-              <h4 className="text-lg font-semibold mb-2 text-white">Tahun Pengalaman</h4>
-              <p className="text-gray-400 text-sm">Melayani masyarakat dengan dedikasi</p>
-            </div>
+            {content.stats.map((stat, index) => {
+              const icons = [Users, BookOpen, Globe];
+              const colors = ['blue', 'purple', 'green'];
+              const IconComponent = icons[index] || Users;
+              const color = colors[index] || 'blue';
+              
+              return (
+                <div key={stat.id} className={`bg-gradient-to-br from-${color}-500/10 to-${color === 'purple' ? 'pink' : color === 'green' ? 'blue' : 'purple'}-500/10 p-8 rounded-2xl border border-${color}-400/20 hover:border-${color}-400/50 transition-all duration-300 transform hover:scale-105 group`}>
+                  <div className="flex items-center justify-between mb-4">
+                    <IconComponent className={`h-12 w-12 text-${color}-400 group-hover:scale-110 transition-transform duration-300`} />
+                    <div className={`text-3xl font-bold text-${color}-400`}>{stat.value}</div>
+                  </div>
+                  <h4 className="text-lg font-semibold mb-2 text-white">{stat.title}</h4>
+                  <p className="text-gray-400 text-sm">{stat.description}</p>
+                </div>
+              );
+            })}
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
@@ -914,14 +919,14 @@ const LibraryWebsite = () => {
                     <Phone className="h-6 w-6 text-green-400" />
                     <div>
                       <p className="font-semibold">Telepon</p>
-                      <p className="text-gray-400">-------------</p>
+                      <p className="text-gray-400">{content.contact.phone}</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-4">
                     <Mail className="h-6 w-6 text-blue-400" />
                     <div>
                       <p className="font-semibold">Email</p>
-                      <p className="text-gray-400">-------------</p>
+                      <p className="text-gray-400">{content.contact.email}</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-4">
@@ -929,7 +934,7 @@ const LibraryWebsite = () => {
                     <div>
                       <p className="font-semibold">Alamat</p>
                       <p className="text-gray-400">
-                        Ulee Kareung Kec. Indrapuri Kabupaten Aceh Besar  
+                        {content.contact.address}
                       </p>
                     </div>
                   </div>
@@ -1033,6 +1038,13 @@ const LibraryWebsite = () => {
           </div>
         </div>
       </footer>
+
+      {/* Admin Panel */}
+      <AdminPanel
+        isVisible={showAdminPanel}
+        onClose={() => setShowAdminPanel(false)}
+        onSave={handleAdminSave}
+      />
     </div>
   );
 };

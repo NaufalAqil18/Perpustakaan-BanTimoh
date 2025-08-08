@@ -1,70 +1,192 @@
-# Getting Started with Create React App
+# Perpustakaan Ban Timoh - Website dengan Panel Admin
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Website perpustakaan modern dengan panel admin yang dapat mengubah konten secara realtime.
 
-## Available Scripts
+## Fitur Utama
 
-In the project directory, you can run:
+### 🎨 Website Perpustakaan
+- **Hero Section** - Tampilan utama dengan judul dan tombol aksi
+- **Statistik** - Menampilkan data perpustakaan secara dinamis
+- **Profil** - Sejarah, visi, dan misi perpustakaan
+- **OPAC** - Sistem katalog online
+- **AR Experience** - Pengalaman augmented reality
+- **Galeri** - Dokumentasi kegiatan dan event
+- **Testimoni** - Ulasan dari pengguna
+- **Kontak** - Informasi lokasi dan kontak
 
-### `npm start`
+### ⚙️ Panel Admin
+- **Edit Konten Real-time** - Ubah konten website tanpa reload
+- **Manajemen Hero Section** - Edit judul, subtitle, dan tombol
+- **Manajemen Statistik** - Tambah, edit, hapus statistik
+- **Manajemen Kontak** - Update informasi kontak
+- **Auto-save** - Konten tersimpan otomatis
+- **Backup System** - Data tersimpan di localStorage dan server
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Teknologi yang Digunakan
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Frontend
+- **React 18** - Framework JavaScript
+- **Tailwind CSS** - Framework CSS
+- **Lucide React** - Icon library
+- **Custom Hooks** - State management
 
-### `npm test`
+### Backend
+- **Express.js** - Server Node.js
+- **CORS** - Cross-origin resource sharing
+- **File System** - Penyimpanan data JSON
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Instalasi dan Setup
 
-### `npm run build`
+### 1. Clone Repository
+```bash
+git clone <repository-url>
+cd perpustakaan-bantimoh
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 2. Install Dependencies
+```bash
+npm install
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### 3. Menjalankan Development Server
+```bash
+# Menjalankan server backend dan frontend secara bersamaan
+npm run dev
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# Atau menjalankan secara terpisah
+npm run server  # Backend (port 5000)
+npm start       # Frontend (port 3000)
+```
 
-### `npm run eject`
+### 4. Build untuk Production
+```bash
+npm run build
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Cara Menggunakan Panel Admin
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### 1. Akses Mode Admin
+- Tambahkan `?admin=true` di URL website
+- Contoh: `http://localhost:3000?admin=true`
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### 2. Panel Admin Features
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+#### Hero Section
+- Edit judul utama website
+- Edit subtitle/deskripsi
+- Edit teks tombol aksi
 
-## Learn More
+#### Statistik
+- Tambah statistik baru
+- Edit nilai, judul, dan deskripsi
+- Hapus statistik yang tidak diperlukan
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+#### Kontak
+- Update nomor telepon
+- Update email
+- Update alamat perpustakaan
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### 3. Menyimpan Perubahan
+- Klik tombol "Edit" untuk mengaktifkan mode edit
+- Lakukan perubahan pada form
+- Klik "Simpan" untuk menyimpan perubahan
+- Klik "Batal" untuk membatalkan perubahan
 
-### Code Splitting
+## Struktur File
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```
+perpustakaan-bantimoh/
+├── src/
+│   ├── components/
+│   │   └── AdminPanel.js          # Panel admin component
+│   ├── hooks/
+│   │   └── useContentManager.js   # Hook untuk manajemen konten
+│   ├── App.js                     # Component utama website
+│   └── index.js                   # Entry point
+├── server.js                      # Backend server
+├── package.json                   # Dependencies dan scripts
+└── README.md                      # Dokumentasi
+```
 
-### Analyzing the Bundle Size
+## API Endpoints
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### GET /api/content
+Mengambil semua konten website
 
-### Making a Progressive Web App
+### POST /api/content
+Menyimpan konten website baru
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### PUT /api/content/:section
+Mengupdate section tertentu
 
-### Advanced Configuration
+### DELETE /api/content
+Reset konten ke default
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Penyimpanan Data
 
-### Deployment
+### Development
+- Data tersimpan di `data/content.json`
+- Backup di localStorage browser
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### Production
+- Data tersimpan di file system server
+- Backup otomatis di localStorage
 
-### `npm run build` fails to minify
+## Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### 1. Build Frontend
+```bash
+npm run build
+```
+
+### 2. Setup Environment Variables
+```bash
+# .env
+REACT_APP_API_URL=https://your-domain.com
+PORT=5000
+```
+
+### 3. Deploy ke Platform
+- **Vercel**: Deploy React app
+- **Railway/Heroku**: Deploy Express server
+- **VPS**: Setup manual dengan PM2
+
+## Fitur Keamanan
+
+- **CORS Protection** - Mencegah akses dari domain yang tidak sah
+- **Input Validation** - Validasi data sebelum disimpan
+- **Error Handling** - Penanganan error yang robust
+- **Backup System** - Data tersimpan di multiple location
+
+## Troubleshooting
+
+### Masalah Umum
+
+1. **Panel Admin tidak muncul**
+   - Pastikan URL mengandung `?admin=true`
+   - Refresh halaman
+
+2. **Perubahan tidak tersimpan**
+   - Cek koneksi internet
+   - Cek console browser untuk error
+   - Data akan tersimpan di localStorage sebagai backup
+
+3. **Server tidak berjalan**
+   - Pastikan port 5000 tidak digunakan
+   - Cek apakah semua dependencies terinstall
+
+## Kontribusi
+
+1. Fork repository
+2. Buat feature branch
+3. Commit perubahan
+4. Push ke branch
+5. Buat Pull Request
+
+## Lisensi
+
+MIT License - lihat file LICENSE untuk detail
+
+## Kontak
+
+Untuk pertanyaan atau dukungan, silakan hubungi tim pengembang.
